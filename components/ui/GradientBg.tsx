@@ -1,5 +1,4 @@
 "use client";
-
 import { cn } from "@/lib/utils";
 import { useEffect, useRef, useState } from "react";
 
@@ -40,10 +39,16 @@ export const BackgroundGradientAnimation = ({
   const [curY, setCurY] = useState(0);
   const [tgX, setTgX] = useState(0);
   const [tgY, setTgY] = useState(0);
+  
+  // State to detect if we're on the client
+  const [isClient, setIsClient] = useState(false);
 
-  // Apply gradient variables to the document body
+  // Ensure code that relies on document only runs on the client
   useEffect(() => {
-    if (typeof document !== "undefined") {
+    setIsClient(true); // This runs only on the client
+
+    if (typeof window !== "undefined") {
+      // Only runs on the client, safely using `document`
       document.body.style.setProperty(
         "--gradient-background-start",
         gradientBackgroundStart
@@ -61,42 +66,23 @@ export const BackgroundGradientAnimation = ({
       document.body.style.setProperty("--size", size);
       document.body.style.setProperty("--blending-value", blendingValue);
     }
-  }, [
-    gradientBackgroundStart,
-    gradientBackgroundEnd,
-    firstColor,
-    secondColor,
-    thirdColor,
-    fourthColor,
-    fifthColor,
-    pointerColor,
-    size,
-    blendingValue,
-  ]);
+  }, [gradientBackgroundStart, gradientBackgroundEnd, firstColor, secondColor, thirdColor, fourthColor, fifthColor, pointerColor, size, blendingValue]);
 
-  // Animation logic for interactive pointer
   useEffect(() => {
-    if (interactiveRef.current) {
-      const updatePointer = () => {
-        setCurX((prevX) => prevX + (tgX - prevX) / 20);
-        setCurY((prevY) => prevY + (tgY - prevY) / 20);
-
-        if (interactiveRef.current) {
-          interactiveRef.current.style.transform = `translate(${Math.round(
-            curX
-          )}px, ${Math.round(curY)}px)`;
-        }
-
-        requestAnimationFrame(updatePointer);
-      };
-
-      const animationId = requestAnimationFrame(updatePointer);
-
-      return () => cancelAnimationFrame(animationId);
+    function move() {
+      if (!interactiveRef.current) {
+        return;
+      }
+      setCurX(curX + (tgX - curX) / 20);
+      setCurY(curY + (tgY - curY) / 20);
+      interactiveRef.current.style.transform = `translate(${Math.round(
+        curX
+      )}px, ${Math.round(curY)}px)`;
     }
-  }, [tgX, tgY, curX, curY]);
 
-  // Handle mouse movement
+    move();
+  }, [tgX, tgY]);
+
   const handleMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
     if (interactiveRef.current) {
       const rect = interactiveRef.current.getBoundingClientRect();
@@ -105,13 +91,12 @@ export const BackgroundGradientAnimation = ({
     }
   };
 
-  // Detect Safari browser
   const [isSafari, setIsSafari] = useState(false);
   useEffect(() => {
-    if (typeof navigator !== "undefined") {
-      setIsSafari(/^((?!chrome|android).)*safari/i.test(navigator.userAgent));
-    }
+    setIsSafari(/^((?!chrome|android).)*safari/i.test(navigator.userAgent));
   }, []);
+
+  if (!isClient) return null; // Return null or a loader while the client-side is being loaded
 
   return (
     <div
@@ -145,26 +130,22 @@ export const BackgroundGradientAnimation = ({
           isSafari ? "blur-2xl" : "[filter:url(#blurMe)_blur(40px)]"
         )}
       >
-        {/* Gradient Layers */}
-        <div
-          className={cn(
-            `absolute [background:radial-gradient(circle_at_center,_var(--first-color)_0,_var(--first-color)_50%)_no-repeat]`,
-            `[mix-blend-mode:var(--blending-value)] w-[var(--size)] h-[var(--size)] top-[calc(50%-var(--size)/2)] left-[calc(50%-var(--size)/2)]`,
-            `animate-first`
-          )}
-        ></div>
-        {/* Add other gradient layers here */}
+        {/* Gradient Divs */}
+        <div className={cn(`absolute [background:radial-gradient(circle_at_center,_var(--first-color)_0,_var(--first-color)_50%)_no-repeat]`, `opacity-100`)}/>
+        <div className={cn(`absolute [background:radial-gradient(circle_at_center,_rgba(var(--second-color),_0.8)_0,_rgba(var(--second-color),_0)_50%)_no-repeat]`, `opacity-100`)}/>
+        <div className={cn(`absolute [background:radial-gradient(circle_at_center,_rgba(var(--third-color),_0.8)_0,_rgba(var(--third-color),_0)_50%)_no-repeat]`, `opacity-100`)}/>
+        <div className={cn(`absolute [background:radial-gradient(circle_at_center,_rgba(var(--fourth-color),_0.8)_0,_rgba(var(--fourth-color),_0)_50%)_no-repeat]`, `opacity-70`)}/>
+        <div className={cn(`absolute [background:radial-gradient(circle_at_center,_rgba(var(--fifth-color),_0.8)_0,_rgba(var(--fifth-color),_0)_50%)_no-repeat]`, `opacity-100`)}/>
 
-        {/* Interactive Pointer */}
         {interactive && (
           <div
             ref={interactiveRef}
             onMouseMove={handleMouseMove}
             className={cn(
               `absolute [background:radial-gradient(circle_at_center,_rgba(var(--pointer-color),_0.8)_0,_rgba(var(--pointer-color),_0)_50%)_no-repeat]`,
-              `[mix-blend-mode:var(--blending-value)] w-full h-full -top-1/2 -left-1/2`
+              `opacity-70`
             )}
-          ></div>
+          />
         )}
       </div>
     </div>
