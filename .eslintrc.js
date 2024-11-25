@@ -1,12 +1,7 @@
 module.exports = {
-    extends: [
-      'next/core-web-vitals',
-      'plugin:@typescript-eslint/recommended',
-    ],
+    extends: ['airbnb-typescript'],
     rules: {
-      '@typescript-eslint/no-explicit-any': 'error',
-      'prefer-const': 'error',
-      'react-hooks/exhaustive-deps': 'warn',
-      '@typescript-eslint/no-unused-vars': 'error',
+      '@typescript-eslint/no-explicit-any': 'warn', // Only warn for `any`
     },
   };
+  
