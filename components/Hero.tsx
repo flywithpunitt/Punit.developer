@@ -66,8 +66,8 @@ const TechStack = () => (
       <span className="text-sm text-green-100">React</span>
     </div>
     <div className="flex items-center bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full">
-      <FaRocket className="mr-2 text-purple-300" />
-      <span className="text-sm text-purple-100">TypeScript</span>
+      <FaRocket className="mr-2 text-blue-500" />
+      <span className="text-sm text-white">TypeScript</span>
     </div>
   </motion.div>
 );
