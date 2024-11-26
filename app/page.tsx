@@ -3,9 +3,9 @@
 import { navItems } from "@/data";
 import { FloatingNav } from "@/components/ui/FloatingNavbar";
 import Hero from "@/components/Hero";
-
+import AboutSection from "@/components/AboutSection";
 import Footer from "@/components/Footer";
-
+import Education from "@/components/Education";
 
 const Home = () => {
   return (
@@ -13,10 +13,10 @@ const Home = () => {
        <div className="max-w-7xl w-full">
         <FloatingNav navItems={navItems} />
         <Hero />
-        {/* <AboutSection />
-        <Grid />
-        <RecentProjects />
-        <Education /> */}
+        <AboutSection />
+        {/* <Grid />
+        <RecentProjects /> */}
+        <Education />
         <Footer />
       </div>
       <h1>its Comingggggggggggg !!</h1>
