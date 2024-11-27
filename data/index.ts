@@ -1,3 +1,5 @@
+import { link } from "fs";
+
 export const navItems = [
     { name: "About", link: "#about" },
     { name: "Projects", link: "#projects" },
@@ -72,11 +74,11 @@ export const navItems = [
   export const projects = [
     {
       id: 1,
-      title: "3D Solar System Planets to Explore",
-      des: "Explore the wonders of our solar system with this captivating 3D simulation of the planets using Three.js.",
+      title: "Job-portal-Job Searching App",
+      des: "Transfer your carrer with Premiun IT and non-IT job across the nation build in mern stack",
       img: "/p1.svg",
       iconLists: ["/re.svg", "/tail.svg", "/ts.svg", "/three.svg", "/fm.svg"],
-      link: "/ui.earth.com",
+      link: "https://job-hunt-03qb.onrender.com/",
     },
     {
       id: 2,

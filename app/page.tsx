@@ -1,9 +1,10 @@
 "use client";
 
+
 import { navItems } from "@/data";
 
 import Hero from "@/components/Hero";
-// import Grid from "@/components/Grid";
+import Grid from "@/components/Grid";
 import Footer from "@/components/Footer";
 import RecentProjects from "@/components/RecentProjects";
 import { FloatingNav } from "@/components/ui/FloatingNavbar";
@@ -18,7 +19,7 @@ const Home = () => {
         <FloatingNav navItems={navItems} />
         <Hero />
         <AboutSection />
-        {/* <Grid /> */}
+        <Grid />
         <RecentProjects />
         <Education />
         <Footer />
